@@ -38,53 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.toolbar);
 
-
         ArrayList<String> urls = new ArrayList<>();
-
         AtomicReference<String> imageURL = new AtomicReference<>("");
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
 
         updateImgViewerWithRemoteGif(imageURL, imageView, urls);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    //System.out.println(JSONCollection.getRandomGifLink());
-//                    imageURL.set(JSONCollection.getRandomGifLink());
-////                Glide
-////                        .with(MainActivity.this)
-////                        .asGif()
-////                            .load(JSONCollection.getRandomGifLink())
-//////                .load("https://media1.giphy.com/media/26FPGsG2NZL1QzAFW/giphy.gif")
-//////                        .load(JSONCollection)
-////                        .into(imageView);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Glide
-//                                .with(MainActivity.this)
-//                                .asGif()
-//                                .load(imageURL.get())
-////                .load("https://media1.giphy.com/media/26FPGsG2NZL1QzAFW/giphy.gif")
-////                        .load(JSONCollection)
-//                                .into(imageView);
-//                    }
-//                });
-//
-//            }
-//
-//
-//        }).start();
-
-
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -94,19 +55,32 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.buttonNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "3Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 position++;
-//                updateImgViewerWithRemoteGif(imageURL, imageView, urls.get(position));
                 updateImgViewerWithRemoteGif(imageURL, imageView, urls);
                 System.out.println(urls.toString());
 
             }
         });
 
+
+        findViewById(R.id.buttonBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position--;
+                updateImgViewerWithRemoteGif(imageURL, imageView, urls);
+                System.out.println(urls.toString());
+
+            }
+        });
     }
 
+
+
+
+
         public void updateImgViewerWithRemoteGif(AtomicReference<String> imageURL, ImageView imageView, ArrayList<String> urls) {
+
+        imageView.setImageResource(R.drawable.loading);
 
             new Thread(new Runnable() {
                 @Override
@@ -124,8 +98,9 @@ public class MainActivity extends AppCompatActivity {
                             Glide
                                     .with(MainActivity.this)
                                     .asGif()
-                                    .load(imageURL.get())
-                                    .into(imageView);
+                                    .load(urls.get(urls.size() - 1)).error(R.drawable.err)
+                                    .into(imageView)
+                            ;
                         }
                     });
 
